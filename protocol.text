@@ -1,0 +1,17 @@
+// Running backend server:
+npm run server
+
+// Running frontend server:
+npm start
+
+// Adding NgRx store:
+ng add @ngrx/store
+This will add ngrx store module for the root and also create a reducer folder with index.ts file.
+
+// Adding NgRx Dev-tools
+ng add @ngrx/store-devtools
+
+// Adding ngrx store to the feature module (in this case Auth module):
+ng generate store auth/Auth --module auth.module.ts
+This wil add a ngrx store to the auth module(feature module) and also create a reducer folder with index.ts file.
+
