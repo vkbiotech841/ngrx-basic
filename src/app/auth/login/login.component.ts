@@ -17,7 +17,7 @@ import { login } from '../auth.actions';
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup;
+  public form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -37,18 +37,12 @@ export class LoginComponent implements OnInit {
 
   }
 
-  login() {
+  public login(): void {
     const val = this.form.value;
     this.auth.login(val.email, val.password)
       .pipe(
         tap(user => {
           console.log("user", user);
-          // saving user profile inside the store;
-          // In order to store a action(data) to the store. First we need to dispatch() an action.
-          // An action is simply a plan object with type, payload(where actual data goes here).
-          // Here, we are using auth.action.ts file to create actions.
-          // Dispatching an action does changes the state of the application. Hence, after dispatching an action we need to also change the state of the application using reducer.
-          // Reducer is a simple javascript function where takes current state of the application and actions and returns the new state of the application. Or simple word it is a new state creator.
           const newLoginAction = login({ user: user });
           console.log("New Login Actions", newLoginAction);
           this.store.dispatch(newLoginAction);
@@ -59,9 +53,20 @@ export class LoginComponent implements OnInit {
         noop,
         () => alert('Login Failed')
       )
-
-
   }
+
+  ///////////// Saving user profile inside the store /////////////////////
+  // Inject the store into the constructor and define the return type.
+  // Here, we using global AppState present in the reducer/index.ts file in the root directory.
+
+  // Dispatching an action:
+  // store APIs have multiple methods. One of the method is store.dispatch().
+  // In order to store a action(data) to the store. First we need to dispatch() an action.
+  // An action is simply a plan object with type, payload(where actual data goes here).
+  // Here, we are using auth.action.ts file to create actions.
+
+  // Dispatching an action does changes the state of the application. Hence, after dispatching an action we need to also change the state of the application using reducer.
+  // Reducer is a simple javascript function where takes current state of the application and actions and returns the new state of the application. Or simple word it is a new state creator.
 
 }
 

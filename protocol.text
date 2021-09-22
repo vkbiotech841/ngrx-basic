@@ -15,3 +15,5 @@ ng add @ngrx/store-devtools
 ng generate store auth/Auth --module auth.module.ts
 This wil add a ngrx store to the auth module(feature module) and also create a reducer folder with index.ts file.
 
+
+
