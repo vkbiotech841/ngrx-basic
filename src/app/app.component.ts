@@ -6,7 +6,7 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 import { AppState } from './reducers';
 import { AuthState } from './auth/reducers';
 import { isLoggedIn, isLoggedOut } from './auth/auth.selector';
-import { logout } from './auth/auth.actions';
+import { login, logout } from './auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getUserProfileAndStore();
     // this.getStoreDataUsingSubscription();
     this.getStoreDataUsingSelector();
     this.router.events.subscribe(event => {
@@ -47,6 +48,13 @@ export class AppComponent implements OnInit {
         }
       }
     });
+  }
+
+  public getUserProfileAndStore(): void {
+    const userProfile = localStorage.getItem('user');
+    if (userProfile) {
+      this.store.dispatch(login({ user: JSON.parse(userProfile) }))
+    }
   }
 
 
@@ -101,9 +109,6 @@ export class AppComponent implements OnInit {
 // Therefore, to avoid the above problem. We want to create an "In-momory database a the client side", where we want to keep the our data while the application is still active and it will be indepedend of any component. This will allow data to survice during application navigation.
 // Also we will reduce the latency and avoid the data loading time. 
 // Also, we will show the data as soon as it gets edited or modified or changed.
-
-// What we are going to implement in this application:
-// (1) Defining user authentication state: login and logout functions that will keep the user  logged in between the browser request.
 
 ////////////  Working with NgRx ////////////////
 
@@ -175,3 +180,19 @@ function authReducer(currentState, action): AuthState {
 // => Composition
 // => Testability
 // => Type Safety
+
+////////////// NgRx Effects //////////////////////////////
+// Side Effects:
+// Side effect is something extra that we want to do in our application after an action has been dispatched and processed by the store. So after reducer linked to the action have been triggered, we want to do something else such save data to the backend or local storage. 
+
+// Whenever we change something in the store, at the same time, we also sometimes wish to store those changes to the backend.Here, NgRx effect comes into the picture.
+// In order to use the NgRx effect module, first we need to import the app.module as:
+// EffectsModule.forRoot([])
+// We can also add this to the feature modules as:
+// // EffectsModule.forFeature([])
+// Here, we want to get the user details and save the browser local storage so the application keep on logged in even after the browser refresh.
+
+
+
+// What we are going to implement in this application:
+// (1) Defining user authentication state: login and logout functions that will keep the user  logged in between the browser request and we have implemented the authguards to protect the courses route.
