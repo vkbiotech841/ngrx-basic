@@ -193,6 +193,41 @@ function authReducer(currentState, action): AuthState {
 // Here, we want to get the user details and save the browser local storage so the application keep on logged in even after the browser refresh.
 
 
+////////////////// NgRx Development tools ///////////////////////////
+
+////////////////// Time-Travelling Debugger //////////
+
+// In order to debugg the ngrx store steps. We need a time-travelling debugger that keeps tracks of all the actions performed in sequence. 
+// If go the redux tool in the browser inspect then you will find a play button. This play takes us through the all the state snapshots of the action we performed using the store in sequence. but at the present we can see the state changes snapshots but their respective screen in the application is not changing. Hence, we need to do something extra that means we need to also store the router snapshot so that we Time-travelling debugger goes through each steps of the state then it should also be changing the corresponding screen in the application.
+// This can be achieved by NgRx storerouterConnectingModule as follows:
+// StoreRouterConnectingModule.forRoot({
+//   stateKey: 'router',
+//   routerState: RouterState.Minimal
+// })
+// This will be like an action, that will save the router data to the store parallel to the auth parameter. Since, this is an action,we also need to set a reducer for this as follows:
+// router: routerReducer
+// Now, if you go to the redux dev tool then you will find several new action for router-store/navigation. This actions stores the router details in the store.
+// Now, To test the Time-travelling debugger tools is actually working. Lets login and logout then login again.
+// Once, it is done, drag the slidder of the play buttom all the way to left and click on play button. This will takes through the each action that you have performed.
+
+/////////////// NgRx Runtime checks ////////////////
+// While an action, we should keep in mind that we are not mutating the original state of the store. because if mutate the original state, then time-travelling debugger will not work, because we have templated the origin state, now original state has been templated.Hence, we need to prevent mutating the original state of the store.In order to do so, we need to some extra checks. Hence, NgRx runtime checks comes into the picture.
+// Add this as follows:
+// StoreModule.forRoot(reducers, {
+//   metaReducers,
+//   runtimeChecks: {
+//     strictStateImmutability: true,
+//     strictActionImmutability: true,
+//     strictStateSerializability: true,
+//     strictActionSerializability: true
+//   }
+// }),
+
+///////// NgRx Metareducers //////////
+// Metareducers is just like the a plane reducer which state the current state and an action and return a new state. but difference is metareducer are evoked befor the plan reducer.
+
+
+
 
 // What we are going to implement in this application:
 // (1) Defining user authentication state: login and logout functions that will keep the user  logged in between the browser request and we have implemented the authguards to protect the courses route.
