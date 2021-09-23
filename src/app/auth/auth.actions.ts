@@ -11,12 +11,16 @@ import { createAction, props } from "@ngrx/store";
 
 //////////// Grouping of actions ////////////////// 
 // actions with related function can be grouped and kept in the same file. Example: in this case login and logout has almost the same purpose. Hence, these two actions can be kept together.
+export enum AuthenticationTypes {
+    LoginUser = '[Login Page] User Login',
+    LogoutUser = '[Top Menu] Logout'
+}
 
 export const login = createAction(
-    "[Login Page] User Login",
+    AuthenticationTypes.LoginUser,
     props<{ user: User }>()
 );
 
 export const logout = createAction(
-    "[Top Menu] Logout",
+    AuthenticationTypes.LogoutUser,
 )
