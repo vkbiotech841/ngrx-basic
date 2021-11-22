@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
 
 // Generally when we navigate from one page to another page, each APIs call gets executed and it call multiple APIs. This is because these data are bound to the component. Whenever this component is destroyed then next time we need to again fetch the data using APIs calls. In this kind of system, the lifecycle of data is tightly bound to the lifecycle of the component. It is a costly way of loading the data. Hence, to reduce the number of APIs call and fetching data at once and distributed to the other componenent when state changes is required. Hence, state managament solutions are needed.
 // Also, when we change a variable at one place then if its value need to change across the platform then generally we first save the data to the backend and data gets fetch and then it gets display. These process need some time.Therefore, in that case state management solution are also required to reduce the timing and prevent reloading of data.
-// Therefore, to avoid the above problem. We want to create an "In-momory database a the client side", where we want to keep the our data while the application is still active and it will be indepedend of any component. This will allow data to survice during application navigation.
+// Therefore, to avoid the above problems. We want to create an "In-momory database a the client side", where we want to keep the our data while the application is still active and it will be indepedend of any component. This will allow data to survice during application navigation.
 // Also we will reduce the latency and avoid the data loading time. 
 // Also, we will show the data as soon as it gets edited or modified or changed.
 
@@ -132,12 +132,12 @@ export class AppComponent implements OnInit {
 
 // Adding NgRx Dev-tools
 // ng add @ngrx/store-devtools
-// NgRx dev-tools is a browser extension that allows us to see the ngrx store containt in the browser.
+// NgRx dev-tools is a browser extension that allows us to see the ngrx store contents in the browser.
 // To see the data in the browser, we need to install Redux DevTools Extension.
 
 // Adding ngrx store to the feature module (in this case Auth module):
 // ng generate store auth/Auth --module auth.module.ts
-// This wil add a ngrx store to the auth module(feature module) and also create a reducer folder with index.ts file.
+// This will add a ngrx store to the auth module(feature module) and also create a reducer folder with index.ts file.
 
 /////////// Key Concepts of the NgRx Architecture //////////////////
 
@@ -192,6 +192,9 @@ function authReducer(currentState, action): AuthState {
 // // EffectsModule.forFeature([])
 // Here, we want to get the user details and save the browser local storage so the application keep on logged in even after the browser refresh.
 
+// In order to AuthEffects to work, first we need to plugin AuthEffects to the AuthModule as follows:
+// EffectsModule.forFeature([AuthEffects])
+
 
 ////////////////// NgRx Development tools ///////////////////////////
 
@@ -204,15 +207,17 @@ function authReducer(currentState, action): AuthState {
 //   stateKey: 'router',
 //   routerState: RouterState.Minimal
 // })
-// This will be like an action, that will save the router data to the store parallel to the auth parameter. Since, this is an action,we also need to set a reducer for this as follows:
+// This will be like an action, that will save the router data to the store parallel to the auth parameter. Since, this is an action,we also need to set a reducer (at root level) for this as follows:
 // router: routerReducer
 // Now, if you go to the redux dev tool then you will find several new action for router-store/navigation. This actions stores the router details in the store.
 // Now, To test the Time-travelling debugger tools is actually working. Lets login and logout then login again.
 // Once, it is done, drag the slidder of the play buttom all the way to left and click on play button. This will takes through the each action that you have performed.
 
 /////////////// NgRx Runtime checks ////////////////
-// While an action, we should keep in mind that we are not mutating the original state of the store. because if mutate the original state, then time-travelling debugger will not work, because we have templated the origin state, now original state has been templated.Hence, we need to prevent mutating the original state of the store.In order to do so, we need to some extra checks. Hence, NgRx runtime checks comes into the picture.
-// Add this as follows:
+
+// While an action, we should keep in mind that we are not mutating the original state of the store. because if mutate the original state, then time-travelling debugger will not work, because we have tempered the origin state, now original state has been tempered and changed. Hence, we need to prevent mutating the original state of the store. In order to do so, we need to some extra checks. Hence, NgRx runtime checks comes into the picture.
+// Add this as follows at the appModule:
+
 // StoreModule.forRoot(reducers, {
 //   metaReducers,
 //   runtimeChecks: {
@@ -229,5 +234,8 @@ function authReducer(currentState, action): AuthState {
 
 
 
-// What we are going to implement in this application:
-// (1) Defining user authentication state: login and logout functions that will keep the user  logged in between the browser request and we have implemented the authguards to protect the courses route.
+/////////////////// What we are going to implement in this application /////////////////////////
+
+// (1) Defining user authentication state: login and logout functions that will keep the user logged in between the browser request and we have implemented the authguards to protect the courses route.
+
+// (2) In our home component, we are reloading data for the course whenever we are navigation away and coming back to the home component. Here, we wish to first store the data in the store and prevent the apis call again and again.

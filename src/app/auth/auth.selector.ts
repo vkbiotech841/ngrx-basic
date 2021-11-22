@@ -23,7 +23,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 export const selectAuthState = createFeatureSelector<AuthState>("auth");
 
 // Selectors
-// Here, we are first getting the auth objecting using the selectAuthState and then we are mapping the user object. (!!) means if value is true. and similary in isLoggedOut we are checking if user is not present by !isLoggedIn result.
+// Here, we are first getting the auth object using the selectAuthState and then we are mapping the user object. (!!) means if value is true. and similary in isLoggedOut we are checking if user is not present by !isLoggedIn result.
 
 export const isLoggedIn = createSelector(
     // state => state["auth"],

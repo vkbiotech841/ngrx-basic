@@ -53,7 +53,7 @@ export class AuthEffects {
 
 // Side is something to be done in response to the given action. Actions gets dispatched, its reducer gets trigged and then after that we wish to do something else (side effect). In this case as a side effect we wish the store the user details to the browser local storage.
 
-// In order AuthEffects to work, first we need to plugin AuthEffects to the AuthModule as follows:
+// In order to AuthEffects to work, first we need to plugin AuthEffects to the AuthModule as follows:
 // EffectsModule.forFeature([AuthEffects])
 
 //////////////// Side effect method 01 ///////////////////
